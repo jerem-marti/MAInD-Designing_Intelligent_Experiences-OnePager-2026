@@ -49,6 +49,7 @@
     splitAllWords();
     splitAllChars();
     splitMatchyCopies();
+    splitAfterAgentCopy();
     wireMatchyInteractions();
     try {
       buildTimelines();
@@ -112,7 +113,7 @@
     document.querySelectorAll('.split .word .placeholder').forEach(function (el) {
       el.style.opacity = '0';
     });
-    document.querySelectorAll('.hook__groups, .hook__sub, .invitation__cta, .invitation__micro, .truth__phase, .truth__lede-accent, .truth__problem-accent, .truth__review--positive, .truth__review--critical, .truth__stat-figure, .truth__stat-copy, .journey__phase, .journey__dna, .journey__dna-slider, .journey__match, .journey__why, .journey__matchy, .journey__matchy-bubble, .journey__matchy-copy, .journey__matchy-char').forEach(function (el) {
+    document.querySelectorAll('.hook__groups, .hook__sub, .invitation__cta, .invitation__micro, .truth__phase, .truth__lede-accent, .truth__problem-accent, .truth__review--positive, .truth__review--critical, .truth__stat-figure, .truth__stat-copy, .journey__phase, .journey__dna, .journey__dna-slider, .journey__match, .journey__why, .journey__matchy, .journey__matchy-bubble, .journey__matchy-copy, .journey__matchy-char, .after__phase, .after__review, .after__story-line--turn, .after__signal-title, .after__agent, .after__agent-avatar, .after__agent-avatar img, .after__agent-bubble, .after__agent-char, .after__sofia').forEach(function (el) {
       el.style.opacity = '1';
       el.style.transform = 'none';
     });
@@ -123,7 +124,7 @@
       el.style.left = getDnaTarget(el);
     });
     // Accent chars end coral.
-    document.querySelectorAll('.truth__lede-accent .char, .truth__problem-accent .char').forEach(function (el) {
+    document.querySelectorAll('.truth__lede-accent .char, .truth__problem-accent .char, #scene-after .after__story-line--turn .char, #scene-after .after__signal-title .char').forEach(function (el) {
       el.style.color = 'var(--color-accent)';
     });
     const strike = document.querySelector('.hook__strike-line');
@@ -145,6 +146,26 @@
         } else {
           const span = document.createElement('span');
           span.className = 'journey__matchy-char';
+          span.textContent = ch;
+          el.appendChild(span);
+        }
+      }
+    });
+  }
+
+  function splitAfterAgentCopy() {
+    document.querySelectorAll('#scene-after .after__agent-copy').forEach(function (el) {
+      const text = el.textContent;
+      el.dataset.fullText = text;
+      el.setAttribute('aria-label', text);
+      el.textContent = '';
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (ch === ' ') {
+          el.appendChild(document.createTextNode(' '));
+        } else {
+          const span = document.createElement('span');
+          span.className = 'after__agent-char';
           span.textContent = ch;
           el.appendChild(span);
         }
@@ -212,6 +233,8 @@
     // Resolve the coral color once so GSAP can tween to it (it can't tween var()).
     const coralColor = getComputedStyle(document.documentElement)
       .getPropertyValue('--color-accent').trim() || '#F7374F';
+    const inkColor = getComputedStyle(document.documentElement)
+      .getPropertyValue('--color-text-primary').trim() || '#1F1B16';
 
     // Scene 03 Journey — phase-based layout, like Scene 02.
     gsap.set('#scene-journey .journey__phase', { opacity: 0 });
@@ -237,6 +260,18 @@
       gsap.set('#scene-journey .journey__matchy-copy--entrance', { opacity: 1 });
     }
 
+    // Scene 04 After — story, review, then profile-evolved signal.
+    gsap.set('#scene-after .after__phase', { opacity: 0 });
+    gsap.set('#scene-after .after__phase--story', { opacity: 1 });
+    gsap.set('#scene-after .after__story-line--turn, #scene-after .after__signal-title', { opacity: 0, y: 10 });
+    gsap.set('#scene-after .after__story-line--turn .char, #scene-after .after__signal-title .char', { color: inkColor });
+    gsap.set('#scene-after .after__review', { opacity: 0, y: 30 });
+    gsap.set('#scene-after .after__agent', { opacity: 0, y: 16 });
+    gsap.set('#scene-after .after__agent-avatar', { opacity: 0, y: 10, scale: 0.92 });
+    gsap.set('#scene-after .after__agent-bubble', { opacity: 0, y: 10, scale: 0.985 });
+    gsap.set('#scene-after .after__agent-char', { opacity: 0 });
+    gsap.set('#scene-after .after__sofia', { opacity: 0, y: 16 });
+
     if (isMobile) {
       // Mobile: phases are not absolutely-positioned (CSS overrides under 1024px),
       // so they stack and scroll naturally. All phases must be visible from start —
@@ -259,6 +294,16 @@
       gsap.set('#scene-journey .journey__matchy', { clearProps: 'opacity,transform' });
       gsap.set('#scene-journey .journey__matchy-copy', { clearProps: 'opacity' });
       gsap.set('#scene-journey .journey__matchy-char', { opacity: 1 });
+
+      // Scene 04 on mobile: stack all after beats in order.
+      gsap.set('#scene-after .after__phase', { opacity: 1 });
+      gsap.set('#scene-after .after__story-line--turn, #scene-after .after__signal-title', { opacity: 1, y: 0 });
+      gsap.set('#scene-after .after__story-line--turn .char, #scene-after .after__signal-title .char', { color: coralColor });
+      gsap.set('#scene-after .after__review', { opacity: 1, y: 0 });
+      gsap.set('#scene-after .after__agent', { opacity: 1, y: 0 });
+      gsap.set('#scene-after .after__agent-avatar, #scene-after .after__agent-bubble', { opacity: 1, y: 0, scale: 1 });
+      gsap.set('#scene-after .after__agent-char', { opacity: 1 });
+      gsap.set('#scene-after .after__sofia', { opacity: 1, y: 0 });
 
       // Mobile: simple IO-driven one-shot reveals; no pinning, no scrub.
       const ioOpts = { threshold: 0.25, rootMargin: '0px 0px -10% 0px' };
@@ -488,6 +533,50 @@
       .to('#scene-journey .journey__phase--explain .journey__title .word .placeholder', { opacity: 0, stagger: 0.04, ease: 'power2.out', duration: 0.5 }, '<')
       .to('#scene-journey .journey__why', { y: 0, opacity: 1, ease: 'power2.out', duration: 0.7 })
       .to({}, { duration: J_HOLD });
+    }
+
+    // Scene 04 — After. Sofia settles; the review lands; the profile signal closes.
+    const afterScene = document.querySelector('#scene-after');
+    if (afterScene) {
+      const A_FADE = 0.5;
+      const A_HOLD = 1.4;
+
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: afterScene,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 1,
+          pin: afterScene.querySelector('.scene__sticky'),
+        }
+      })
+      // PHASE 1 — Story turn.
+      .to('#scene-after .after__sofia', { opacity: 1, y: 0, ease: 'power2.out', duration: 0.7 }, 0)
+      .to('#scene-after .after__phase--story .word > span', { opacity: 1, y: 0, stagger: 0.04, ease: 'power2.out', duration: 0.6 }, 0.1)
+      .to('#scene-after .after__phase--story .word .placeholder', { opacity: 0, stagger: 0.04, ease: 'power2.out', duration: 0.6 }, '<')
+      .to('#scene-after .after__story-line--turn', { opacity: 1, y: 0, ease: 'power2.out', duration: 0.5 }, '<+0.45')
+      .to('#scene-after .after__story-line--turn .char', { color: coralColor, stagger: 0.035, ease: 'power2.out', duration: 0.5 }, '<+0.15')
+      .to({}, { duration: A_HOLD })
+
+      // Crossfade story → review.
+      .to('#scene-after .after__phase--story', { opacity: 0, ease: 'power2.in', duration: A_FADE })
+      .to('#scene-after .after__phase--review', { opacity: 1, ease: 'power2.out', duration: A_FADE }, '<')
+      .to('#scene-after .after__review', { opacity: 1, y: 0, ease: 'power2.out', duration: 0.8 }, '<+0.1')
+      .to({}, { duration: A_HOLD * 1.45 })
+
+      // Crossfade review → profile signal.
+      .to('#scene-after .after__phase--review', { opacity: 0, ease: 'power2.in', duration: A_FADE })
+      .to('#scene-after .after__phase--signal', { opacity: 1, ease: 'power2.out', duration: A_FADE }, '<')
+      .to('#scene-after .after__signal-title', { opacity: 1, y: 0, ease: 'power2.out', duration: 0.5 }, '<+0.15')
+      .to('#scene-after .after__signal-title .char', { color: coralColor, stagger: 0.04, ease: 'power2.out', duration: 0.5 }, '<+0.15')
+      .to('#scene-after .after__agent', { opacity: 1, y: 0, ease: 'power2.out', duration: 0.35 }, '<+0.25')
+      .to('#scene-after .after__agent-avatar', { opacity: 1, y: 0, scale: 1, ease: 'back.out(1.7)', duration: 0.35 }, '<')
+      .to('#scene-after .after__agent-avatar img', { rotation: -4, scale: 1.04, ease: 'power2.out', duration: 0.22 }, '<+0.05')
+      .to('#scene-after .after__agent-avatar img', { rotation: 0, scale: 1, ease: 'power2.out', duration: 0.24 })
+      .to('#scene-after .after__agent-bubble', { opacity: 1, y: 0, scale: 0.985, ease: 'power2.out', duration: 0.2 }, '<-0.1')
+      .to('#scene-after .after__agent-bubble', { scale: 1, ease: 'power2.out', duration: 0.18 })
+      .to('#scene-after .after__agent-char', { opacity: 1, stagger: 0.012, ease: 'none', duration: 0.02 }, '<+0.05')
+      .to({}, { duration: A_HOLD });
     }
 
     // Scene 05 — Invitation.
