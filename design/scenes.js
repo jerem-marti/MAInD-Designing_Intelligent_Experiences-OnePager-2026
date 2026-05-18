@@ -113,7 +113,7 @@
     document.querySelectorAll('.split .word .placeholder').forEach(function (el) {
       el.style.opacity = '0';
     });
-    document.querySelectorAll('.hook__groups, .hook__sub, .invitation__cta, .invitation__micro, .truth__phase, .truth__lede-accent, .truth__problem-accent, .truth__review--positive, .truth__review--critical, .truth__stat-figure, .truth__stat-copy, .journey__phase, .journey__dna, .journey__dna-slider, .journey__match, .journey__why, .journey__matchy, .journey__matchy-bubble, .journey__matchy-copy, .journey__matchy-char, .after__phase, .after__review, .after__story-line--turn, .after__signal-title, .after__agent, .after__agent-avatar, .after__agent-avatar img, .after__agent-bubble, .after__agent-char, .after__sofia').forEach(function (el) {
+    document.querySelectorAll('.hook__groups, .hook__sub, .invitation__accent, .invitation__rest, .invitation__cta, .invitation__micro, .truth__phase, .truth__lede-accent, .truth__problem-accent, .truth__review--positive, .truth__review--critical, .truth__stat-figure, .truth__stat-copy, .journey__phase, .journey__dna, .journey__dna-slider, .journey__match, .journey__why, .journey__matchy, .journey__matchy-bubble, .journey__matchy-copy, .journey__matchy-char, .after__phase, .after__review, .after__story-line--turn, .after__signal-title, .after__agent, .after__agent-avatar, .after__agent-avatar img, .after__agent-bubble, .after__agent-char, .after__sofia').forEach(function (el) {
       el.style.opacity = '1';
       el.style.transform = 'none';
     });
@@ -124,7 +124,7 @@
       el.style.left = getDnaTarget(el);
     });
     // Accent chars end coral.
-    document.querySelectorAll('.truth__lede-accent .char, .truth__problem-accent .char, #scene-after .after__story-line--turn .char, #scene-after .after__signal-title .char').forEach(function (el) {
+    document.querySelectorAll('.truth__lede-accent .char, .truth__problem-accent .char, #scene-after .after__story-line--turn .char, #scene-after .after__signal-title .char, #scene-invitation .invitation__accent .char').forEach(function (el) {
       el.style.color = 'var(--color-accent)';
     });
     const strike = document.querySelector('.hook__strike-line');
@@ -235,6 +235,13 @@
       .getPropertyValue('--color-accent').trim() || '#F7374F';
     const inkColor = getComputedStyle(document.documentElement)
       .getPropertyValue('--color-text-primary').trim() || '#1F1B16';
+    const inverseColor = getComputedStyle(document.documentElement)
+      .getPropertyValue('--color-text-inverse').trim() || '#FAF6F0';
+
+    // Scene 05 Invitation — first phrase resolves into coral before the CTA.
+    gsap.set('#scene-invitation .invitation__accent', { opacity: 0, y: 10 });
+    gsap.set('#scene-invitation .invitation__accent .char', { color: inverseColor });
+    gsap.set('#scene-invitation .invitation__rest', { opacity: 0, y: 10 });
 
     // Scene 03 Journey — phase-based layout, like Scene 02.
     gsap.set('#scene-journey .journey__phase', { opacity: 0 });
@@ -304,6 +311,9 @@
       gsap.set('#scene-after .after__agent-avatar, #scene-after .after__agent-bubble', { opacity: 1, y: 0, scale: 1 });
       gsap.set('#scene-after .after__agent-char', { opacity: 1 });
       gsap.set('#scene-after .after__sofia', { opacity: 1, y: 0 });
+      gsap.set('#scene-invitation .invitation__accent', { opacity: 1, y: 0 });
+      gsap.set('#scene-invitation .invitation__accent .char', { color: coralColor });
+      gsap.set('#scene-invitation .invitation__rest', { opacity: 1, y: 0 });
 
       // Mobile: simple IO-driven one-shot reveals; no pinning, no scrub.
       const ioOpts = { threshold: 0.25, rootMargin: '0px 0px -10% 0px' };
@@ -591,10 +601,13 @@
           pin: invitationScene.querySelector('.scene__sticky'),
         }
       })
-      .to('#scene-invitation .invitation__line .word > span', { opacity: 1, y: 0, stagger: 0.06, ease: 'power2.out' })
-      .to('#scene-invitation .invitation__line .word .placeholder', { opacity: 0, stagger: 0.06, ease: 'power2.out' }, '<')
-      .to('#scene-invitation .invitation__cta', { opacity: 1, y: 0, ease: 'power2.out' })
-      .to('#scene-invitation .invitation__micro', { opacity: 1, y: 0, ease: 'power2.out' }, '-=0.2');
+      .to('#scene-invitation .invitation__accent', { opacity: 1, y: 0, ease: 'power2.out', duration: 0.6 }, 0)
+      .to('#scene-invitation .invitation__accent .char', { color: coralColor, stagger: 0.05, ease: 'power2.out', duration: 1.1 }, 0.15)
+      .to('#scene-invitation .invitation__rest', { opacity: 1, y: 0, ease: 'power2.out', duration: 0.35 }, 0.9)
+      .to('#scene-invitation .invitation__rest .word > span', { opacity: 1, y: 0, stagger: 0.08, ease: 'power2.out', duration: 1.2 }, 0.9)
+      .to('#scene-invitation .invitation__rest .word .placeholder', { opacity: 0, stagger: 0.08, ease: 'power2.out', duration: 1.2 }, 0.9)
+      .to('#scene-invitation .invitation__cta', { opacity: 1, y: 0, ease: 'power2.out', duration: 0.65 }, 1.85)
+      .to('#scene-invitation .invitation__micro', { opacity: 1, y: 0, ease: 'power2.out', duration: 0.55 }, 3.05);
     }
   }
 })();

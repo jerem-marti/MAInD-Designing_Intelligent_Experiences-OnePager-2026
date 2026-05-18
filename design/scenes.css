@@ -103,9 +103,17 @@ html { scroll-behavior: auto !important; }
 }
 
 /* --- Scene 05 Invitation --- */
+#scene-invitation { height: 260lvh; }
 .invitation__line {
   /* Let the line wrap naturally to 2 lines on most viewports. */
   max-width: 22ch;
+}
+.invitation__accent,
+.invitation__rest {
+  display: inline;
+}
+.invitation__accent {
+  color: var(--color-text-inverse);
 }
 .invitation__cta {
   display: inline-block;
@@ -946,18 +954,36 @@ html { scroll-behavior: auto !important; }
   background: var(--color-bg-inverse);
   color: var(--color-text-inverse);
   padding: var(--space-xl) var(--page-gutter);
-  font-size: var(--text-micro);
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
 }
 .colophon__wrap {
   max-width: var(--content-max);
   margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-xl);
+  opacity: 0.7;
+}
+.colophon__meta {
+  display: grid;
+  gap: var(--space-xs);
+  max-width: 64rem;
+}
+.colophon__meta p,
+.colophon__links a {
+  font-size: var(--text-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  line-height: var(--leading-normal);
+}
+.colophon__meta span {
+  color: var(--color-text-tertiary);
+}
+.colophon__links {
   display: flex;
-  justify-content: space-between;
+  align-items: flex-start;
+  justify-content: flex-end;
   flex-wrap: wrap;
   gap: var(--space-md);
-  opacity: 0.7;
 }
 .colophon a {
   color: var(--color-text-inverse);
@@ -979,6 +1005,7 @@ html { scroll-behavior: auto !important; }
     padding-block: var(--space-3xl);
   }
   .scene--overlap { margin-top: 0; }
+  #scene-invitation { height: auto; }
   /* Scene 02 phases under mobile: stack in normal flow, not absolute. */
   .truth__phase { position: static; opacity: 1; }
   .truth__content { height: auto; min-height: 0; display: flex; flex-direction: column; gap: var(--space-2xl); }
@@ -1064,10 +1091,13 @@ html { scroll-behavior: auto !important; }
   .after__story-line--turn,
   .after__story-line--turn .char,
   .after__signal-title,
-  .after__signal-title .char { color: var(--color-accent) !important; }
+  .after__signal-title .char,
+  .invitation__accent,
+  .invitation__accent .char { color: var(--color-accent) !important; }
   .hook__strike-line       { transform: scaleX(1) !important; }
   .hook__groups,
   .hook__sub,
+  .invitation__rest,
   .invitation__cta,
   .invitation__micro,
   .truth__review--positive,
@@ -1117,4 +1147,16 @@ html { scroll-behavior: auto !important; }
   #scene-journey .scene__sticky { position: static !important; height: auto !important; padding-block: var(--space-3xl); }
   #scene-after             { height: auto !important; }
   #scene-after .scene__sticky { position: static !important; height: auto !important; padding-block: var(--space-3xl); }
+  #scene-invitation        { height: auto !important; }
+  #scene-invitation .scene__sticky { position: static !important; height: auto !important; padding-block: var(--space-3xl); }
+}
+
+@media (max-width: 767px) {
+  .colophon__wrap {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+  .colophon__links {
+    justify-content: flex-start;
+  }
 }
