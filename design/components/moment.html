@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WeMatch — Component: Moment 3a</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-normal);
+    color: var(--color-text-primary);
+    background: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+    padding: var(--section-gap-tight) var(--page-gutter);
+  }
+  .wrap { max-width: var(--content-max); margin-inline: auto; }
+
+  /* Moment 3a — "It reads her". Prototyped in the sticky-text + visual
+     layout the brief recommends for section 03: narration holds the
+     left, the visual sits right. (In Phase 2 the left column pins on
+     scroll; here it's a static two-column composition that already
+     reads correctly if scroll never fires.) */
+  .moment {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    align-items: start;
+  }
+  @media (max-width: 820px) {
+    .moment { grid-template-columns: 1fr; gap: var(--space-lg); }
+  }
+
+  /* --- Left: the narration --- */
+  .narration__eyebrow {
+    font-size: var(--text-micro);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: var(--space-sm);
+  }
+  .narration__lead {
+    font-family: var(--font-display);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--text-heading);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: var(--space-md);
+  }
+  .narration__body {
+    font-size: var(--text-body);
+    color: var(--color-text-secondary);
+    max-width: var(--measure);
+    margin-bottom: var(--space-md);
+  }
+  .narration__dimensions {
+    font-size: var(--text-body);
+    max-width: var(--measure);
+  }
+  .narration__dimensions strong { font-weight: var(--font-weight-semibold); }
+
+  /* The craft caption — low-key, in-line, attached to its moment.
+     A thin coral rule is the only flourish; it never becomes a
+     section header. */
+  .caption {
+    margin-top: var(--space-lg);
+    padding-left: var(--space-md);
+    border-left: 2px solid var(--color-accent);
+    font-size: var(--text-caption);
+    color: var(--color-text-tertiary);
+    max-width: var(--measure-narrow);
+  }
+
+  /* --- Right: the visual — two converging signals --- */
+  .signals { display: flex; flex-direction: column; gap: var(--space-md); }
+
+  .signal {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md) var(--space-lg);
+  }
+  .signal__tag {
+    font-size: var(--text-micro);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--space-sm);
+  }
+  /* Said — a quiet conversation fragment, not a chat UI */
+  .exchange p { margin-bottom: var(--space-2xs); line-height: var(--leading-snug); }
+  .exchange .from-wm { color: var(--color-text-secondary); }
+  .exchange .from-sofia { color: var(--color-text-primary); font-weight: var(--font-weight-medium); }
+  /* Did — behavioural signal as plain tags */
+  .behaviour { display: flex; flex-direction: column; gap: var(--space-2xs); }
+  .behaviour span { font-size: var(--text-caption); }
+  .behaviour b { font-weight: var(--font-weight-semibold); color: var(--color-text-primary); }
+  .behaviour .verb { color: var(--color-text-tertiary); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="moment">
+
+      <!-- Left — narration -->
+      <div class="narration">
+        <p class="narration__eyebrow">It reads her</p>
+        <p class="narration__lead">WeMatch isn't asking where she wants to go. It's getting to know how she travels.</p>
+        <p class="narration__body">
+          She talks — the exchange feels curious, observational, not transactional.
+          She also just uses the site: she scrolls, she lingers, she saves a
+          Patagonia itinerary. WeMatch reads all of it.
+        </p>
+        <p class="narration__dimensions">
+          It reads how she travels across <strong>eight dimensions</strong> —
+          social energy, pace, planning style, conflict style, and four more.
+        </p>
+        <p class="caption">
+          She's never asked to fill out a form. WeMatch reads what she shares,
+          nothing more.
+        </p>
+      </div>
+
+      <!-- Right — two converging signals -->
+      <div class="signals">
+        <div class="signal exchange">
+          <p class="signal__tag">What she says</p>
+          <p class="from-wm">"What does a good day of travelling feel like to you?"</p>
+          <p class="from-sofia">"Slow mornings. One thing, done properly."</p>
+        </div>
+        <div class="signal">
+          <p class="signal__tag">What she does</p>
+          <div class="behaviour">
+            <span><span class="verb">saved —</span> <b>Patagonia, 12 days</b></span>
+            <span><span class="verb">lingered on —</span> <b>slow-paced trips</b></span>
+            <span><span class="verb">skipped —</span> <b>party itineraries</b></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WeMatch — Component: Journey Opener</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-normal);
+    color: var(--color-text-primary);
+    background: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+    padding: var(--section-gap-tight) var(--page-gutter);
+  }
+  .wrap { max-width: var(--content-max); margin-inline: auto; }
+
+  /* BEAT 1 — the reframe. A before/after of the booking logic.
+     "Today" is set quiet and secondary; "What if" steps forward,
+     carries the one coral mark. The asymmetry is deliberate. */
+  .reframe {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+    max-width: 52rem;
+    margin-bottom: var(--space-xl);
+  }
+  @media (max-width: 600px) { .reframe { grid-template-columns: 1fr; gap: var(--space-md); } }
+
+  .beat__tag {
+    font-size: var(--text-micro);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    margin-bottom: var(--space-2xs);
+  }
+  .beat__line { font-size: var(--text-body-lg); line-height: var(--leading-relaxed); }
+
+  .beat--today .beat__tag  { color: var(--color-text-tertiary); }
+  .beat--today .beat__line { color: var(--color-text-secondary); }
+  .beat--whatif .beat__tag  { color: var(--color-accent); }
+  .beat--whatif .beat__line { color: var(--color-text-primary); }
+
+  .reframe__statement {
+    font-family: var(--font-display);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--text-display-2);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+    max-width: 16ch;
+    margin-bottom: var(--section-gap-tight);
+  }
+
+  /* BEAT 2 — the entrance. Sofia in the scene; WeMatch named for the
+     first time. Text and figure share the row, set off-centre. */
+  .entrance {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: var(--space-xl);
+    align-items: center;
+  }
+  @media (max-width: 760px) { .entrance { grid-template-columns: 1fr; gap: var(--space-lg); } }
+
+  .entrance__line {
+    font-family: var(--font-display);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--text-heading);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-tight);
+    max-width: 20ch;
+  }
+  .entrance__line .brand { color: var(--color-accent); }
+  .entrance__fig {
+    margin: 0;
+    justify-self: center;
+  }
+  .entrance__fig img {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- Beat 1 — the reframe -->
+    <div class="reframe">
+      <div class="beat beat--today">
+        <p class="beat__tag">Today</p>
+        <p class="beat__line">Pick a trip — then hope the group works.</p>
+      </div>
+      <div class="beat beat--whatif">
+        <p class="beat__tag">What if</p>
+        <p class="beat__line">Find your group — and the right trips emerge.</p>
+      </div>
+    </div>
+    <p class="reframe__statement">Group-first, not trip-first.</p>
+
+    <!-- Beat 2 — Sofia meets WeMatch -->
+    <div class="entrance">
+      <p class="entrance__line">
+        Sofia opens WeRoad. <span class="brand">WeMatch</span> is already paying attention.
+      </p>
+      <figure class="entrance__fig">
+        <img src="../sofia/sofia-curious-cutout-2x.webp" alt="Sofia, looking up from her phone with quiet interest">
+      </figure>
+    </div>
+
+  </div>
+</body>
+</html>

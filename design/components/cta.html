@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WeMatch — Component: Invitation / CTA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-normal);
+    color: var(--color-text-primary);
+    background: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* The Invitation echoes the Hook's composition — generous field,
+     line set low and left. One CTA, at the end, never scattered. */
+  .invitation {
+    min-height: 100svh;
+    padding: var(--space-2xl) var(--page-gutter) var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .invitation__line {
+    font-family: var(--font-display);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--text-display-2);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+    max-width: 18ch;
+    text-wrap: balance;
+  }
+  /* "who" carries the coral — the same accent word as the Hook,
+     answering the question the Hook asked. */
+  .invitation__line em { font-style: normal; color: var(--color-accent); }
+
+  .invitation__cta-row {
+    margin-top: var(--space-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+  .cta {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-on-accent);
+    background: var(--color-accent);
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: var(--space-sm) var(--space-lg);
+    cursor: pointer;
+    transition: background var(--duration-fast) var(--ease-standard);
+  }
+  .cta:hover { background: var(--color-accent-strong); }
+  .cta:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 3px;
+  }
+  .invitation__reassurance {
+    font-size: var(--text-caption);
+    color: var(--color-text-tertiary);
+  }
+
+  .invitation__signoff {
+    margin-top: var(--space-2xl);
+    font-size: var(--text-micro);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+  }
+</style>
+</head>
+<body>
+  <main class="invitation">
+    <p class="invitation__line">
+      You're not choosing a destination. You're choosing your people. Start with <em>who</em>.
+    </p>
+    <div class="invitation__cta-row">
+      <button class="cta">Find your group</button>
+      <span class="invitation__reassurance">Five minutes. No commitment.</span>
+    </div>
+    <p class="invitation__signoff">WeMatch — from WeRoad &nbsp;·&nbsp; A SUPSI × Spark Reply project</p>
+  </main>
+</body>
+</html>

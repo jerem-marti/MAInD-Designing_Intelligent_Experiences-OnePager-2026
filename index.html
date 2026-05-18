@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WeMatch — It's who you go with.</title>
+<meta name="description" content="The hardest part of group travel isn't where you go. It's who you go with. Meet WeMatch — a travel companion built around your people.">
+
+<!-- General Sans 400/500/600/700 — one family, four weights -->
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
+
+<!-- Design system (V2) + V3 scene styles -->
+<link rel="stylesheet" href="design/tokens.css">
+<link rel="stylesheet" href="design/scenes.css">
+
+<!-- Scrollytelling engine via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-normal);
+    color: var(--color-text-primary);
+    background: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  img { display: block; max-width: 100%; height: auto; }
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- ===== SCENE 01 · HOOK ===== -->
+  <section id="scene-hook" class="scene" aria-label="Hook">
+    <div class="scene__sticky">
+      <div>
+        <h1 class="display-xl hook__line">
+          Today, WeRoad's travelers search for
+          <span class="hook__strike-wrap">trip<span class="hook__strike-line" aria-hidden="true"></span></span>
+          <span class="hook__groups">groups.</span>
+        </h1>
+        <p class="hook__sub">It's who you go with.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SCENE 02 · TRUTH ===== -->
+  <section id="scene-truth" class="scene" aria-label="Truth">
+    <div class="scene__sticky">
+      <div class="truth__layout">
+        <div class="truth__content">
+
+          <!-- Phase 1: lede — main statement, then the coral kicker. -->
+          <div class="truth__phase truth__phase--lede">
+            <p class="truth__lede" data-split>On WeRoad, you choose the destination, the dates, the price. You don't choose the people.</p>
+            <p class="truth__lede-accent" data-split-chars>The group is left to chance.</p>
+          </div>
+
+          <!-- Phase 2: the two voices — human evidence. Cards stacked. -->
+          <div class="truth__phase truth__phase--reviews">
+            <div class="truth__reviews">
+              <article class="truth__review truth__review--positive">
+                <div class="truth__review-head">
+                  <span class="truth__review-trip">Morocco 360°</span>
+                  <div class="truth__stars" aria-label="5 out of 5 stars">★ ★ ★ ★ ★</div>
+                </div>
+                <p class="truth__quote">"I came back with a wealth of experiences and people I'll hardly forget."</p>
+                <p class="truth__attribution">Marcello · Trustpilot</p>
+              </article>
+
+              <article class="truth__review truth__review--critical">
+                <div class="truth__review-head">
+                  <span class="truth__review-trip">China 360°</span>
+                  <div class="truth__stars" aria-label="1 out of 5 stars">★ <span class="truth__stars-empty">☆ ☆ ☆ ☆</span></div>
+                </div>
+                <p class="truth__quote">"I witnessed toxic dynamics within the group that I had to endure from the second day of the trip."</p>
+                <p class="truth__attribution">FZ · Trustpilot</p>
+              </article>
+            </div>
+          </div>
+
+          <!-- Phase 3: the data — scale evidence. -->
+          <div class="truth__phase truth__phase--stat">
+            <div class="truth__stat">
+              <span class="truth__stat-figure"><span class="truth__stat-num" data-count-to="18">0</span><span class="truth__stat-pct">%</span></span>
+              <p class="truth__stat-copy">of negative reviews trace back to the group.</p>
+            </div>
+          </div>
+
+          <!-- Phase 4: the problem statement — diagnosis (coral) then consequence. -->
+          <div class="truth__phase truth__phase--problem">
+            <h2 class="truth__problem">
+              <span class="truth__problem-accent" data-split-chars>Group fit isn't measured.</span>
+              <span class="truth__problem-rest" data-split>It's hoped for.</span>
+            </h2>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Sofia: outside the layout, absolutely anchored to the screen bottom. -->
+      <aside class="truth__sofia" aria-hidden="true">
+        <img src="design/sofia/sofia-hesitating-cutout-2x.webp" alt="" loading="lazy">
+      </aside>
+    </div>
+  </section>
+
+  <!-- ===== SCENE 03 · JOURNEY ===== -->
+  <section id="scene-journey" class="scene" aria-label="Journey">
+    <div class="scene__sticky">
+      <div class="journey__layout">
+        <div class="journey__content">
+
+          <!-- Phase 1: Entrance — WeMatch declared as the answer to the gap. -->
+          <div class="journey__phase journey__phase--entrance">
+            <p class="journey__entrance journey__entrance--solo" data-split><span class="journey__brand">WeMatch</span> fills the gap.</p>
+          </div>
+
+          <!-- Matchy — detached avatar + persistent conversation bubble. -->
+          <div class="journey__matchy" aria-label="Matchy agent guidance">
+            <button class="journey__matchy-avatar" type="button" aria-label="Nudge Matchy">
+              <img src="design/matchy.svg" alt="" loading="lazy">
+            </button>
+            <div class="journey__matchy-bubble">
+              <div class="journey__matchy-body">
+                <p class="journey__matchy-copy journey__matchy-copy--entrance">Hi, I'm Matchy.</p>
+                <p class="journey__matchy-copy journey__matchy-copy--read">I'm turning Sofia's travel behavior into a live group-fit profile.</p>
+                <p class="journey__matchy-copy journey__matchy-copy--match">Patagonia is the strongest match: the group rhythm fits her better than the other trips.</p>
+                <p class="journey__matchy-copy journey__matchy-copy--explain">Here is why: shared pace, depth-first choices, and room for local detours.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Phase 2: 3a Read — It reads her. Agent introduced via engineering register. -->
+          <div class="journey__phase journey__phase--read">
+            <h2 class="journey__title" data-split>It reads her.</h2>
+            <div class="journey__dna">
+              <div class="journey__dna-head">
+                <p class="journey__dna-label">OUT · behavioral_dna</p>
+                <span class="journey__dna-status">analysing</span>
+              </div>
+              <div class="journey__dna-sliders">
+                <div class="journey__dna-slider" style="--target: 76%;">
+                  <span class="journey__dna-slider-label">social energy</span>
+                  <span class="journey__dna-track"><span class="journey__dna-fill"></span><span class="journey__dna-knob"></span></span>
+                </div>
+                <div class="journey__dna-slider" style="--target: 84%;">
+                  <span class="journey__dna-slider-label">cultural curiosity</span>
+                  <span class="journey__dna-track"><span class="journey__dna-fill"></span><span class="journey__dna-knob"></span></span>
+                </div>
+                <div class="journey__dna-slider" style="--target: 62%;">
+                  <span class="journey__dna-slider-label">planning style</span>
+                  <span class="journey__dna-track"><span class="journey__dna-fill"></span><span class="journey__dna-knob"></span></span>
+                </div>
+                <div class="journey__dna-slider" style="--target: 70%;">
+                  <span class="journey__dna-slider-label">pace</span>
+                  <span class="journey__dna-track"><span class="journey__dna-fill"></span><span class="journey__dna-knob"></span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Phase 3: 3b Match — It matches her. Three cards re-ranked by group fit. -->
+          <div class="journey__phase journey__phase--match">
+            <h2 class="journey__title" data-split>It matches her.</h2>
+            <div class="journey__matches">
+              <article class="journey__match journey__match--top">
+                <p class="journey__match-score">87%</p>
+                <h3 class="journey__match-trip">Patagonia</h3>
+                <p class="journey__match-meta">12 days</p>
+                <p class="journey__match-reason">depth-first · curious group · flexible pace</p>
+              </article>
+              <article class="journey__match">
+                <p class="journey__match-score">79%</p>
+                <h3 class="journey__match-trip">Jordan 360°</h3>
+                <p class="journey__match-meta">8 days</p>
+                <p class="journey__match-reason">active days · early starts · a social group</p>
+              </article>
+              <article class="journey__match">
+                <p class="journey__match-score">71%</p>
+                <h3 class="journey__match-trip">Vietnam</h3>
+                <p class="journey__match-meta">11 days</p>
+                <p class="journey__match-reason">big-group energy · packed itinerary · fast pace</p>
+              </article>
+            </div>
+          </div>
+
+          <!-- Phase 4: 3c Explain — She taps the 87% match, sees the why, pushes back. -->
+          <div class="journey__phase journey__phase--explain">
+            <h2 class="journey__title" data-split>It tells her why.</h2>
+            <div class="journey__why" aria-label="Group overview explanation">
+              <div class="journey__why-topbar">
+                <p class="journey__why-title">Group overview</p>
+                <span class="journey__why-close" aria-hidden="true">×</span>
+              </div>
+              <div class="journey__why-score">
+                <span class="journey__why-score-num">87%</span>
+                <span class="journey__why-score-label">Patagonia group fit</span>
+              </div>
+              <div class="journey__why-grid">
+                <article class="journey__why-card">
+                  <span class="journey__why-card-label">Shared pace</span>
+                  <strong>Slow mornings, long stops</strong>
+                </article>
+                <article class="journey__why-card">
+                  <span class="journey__why-card-label">Travel style</span>
+                  <strong>Depth over checklist</strong>
+                </article>
+                <article class="journey__why-card">
+                  <span class="journey__why-card-label">Group signal</span>
+                  <strong>Local detours welcome</strong>
+                </article>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Sofia (curious) — outside the layout, absolutely anchored to the screen bottom. -->
+      <aside class="journey__sofia" aria-hidden="true">
+        <img class="journey__sofia-image journey__sofia-image--curious" src="design/sofia/sofia-curious-cutout-2x.webp" alt="" loading="lazy">
+        <img class="journey__sofia-image journey__sofia-image--surprised" src="design/sofia/sofia-surprised-v2-cutout-2x-mirror.webp" alt="" loading="lazy">
+      </aside>
+    </div>
+  </section>
+
+  <!-- ===== SCENE 04 · AFTER (placeholder — built in M6) ===== -->
+  <section id="scene-after" class="scene scene--placeholder" aria-label="After">
+    <div class="scene__sticky">
+      <p>Scene 04 placeholder — Sofia's closing review + profile-evolved signal. Built in M6.</p>
+    </div>
+  </section>
+
+  <!-- ===== SCENE 05 · INVITATION ===== -->
+  <section id="scene-invitation" class="scene scene--dark" aria-label="Invitation">
+    <div class="scene__sticky">
+      <div>
+        <h2 class="display-xl invitation__line" data-split>WeMatch finds your group before you find your trip.</h2>
+        <a id="cta" class="invitation__cta" href="#">Meet WeMatch</a>
+        <p class="invitation__micro">A live preview. Real agent. No signup.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="colophon">
+  <div class="colophon__wrap">
+    <span>WeMatch — a course artifact. WeRoad is the parent brand.</span>
+    <a href="design/style-guide.html">System documentation →</a>
+  </div>
+</footer>
+
+<!-- Scrollytelling timelines (post-DOM, after CDN scripts loaded) -->
+<script src="design/scenes.js"></script>
+
+<!-- CTA wiring to live agent (preserved from V2) -->
+<script type="module">
+  import { WEMATCH_AGENT_URL } from './config.js';
+  const cta = document.getElementById('cta');
+  if (cta && WEMATCH_AGENT_URL) {
+    cta.href = WEMATCH_AGENT_URL;
+    cta.rel = 'noopener';
+    cta.target = '_blank';
+  }
+</script>
+
+</body>
+</html>

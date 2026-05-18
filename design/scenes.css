@@ -1,0 +1,898 @@
+/* ============================================================
+   WeMatch V3 — scrollytelling primitives + per-scene styles.
+   Consumes tokens.css. Load AFTER tokens.css in index.html.
+   ============================================================ */
+
+/* --- Lenis controls scroll; disable native smooth that would fight it. --- */
+html { scroll-behavior: auto !important; }
+
+/* --- The scene primitive ---
+   300lvh tall container. Inner content pins via position: sticky.
+   .scene--overlap pulls one scene up into the previous scroll window. */
+.scene { height: 300lvh; position: relative; }
+.scene__sticky {
+  position: sticky;
+  top: 0;
+  height: 100lvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--space-xl) var(--page-gutter);
+  max-width: var(--content-max);
+  margin-inline: auto;
+}
+.scene--overlap { margin-top: -100lvh; }
+.scene--dark {
+  background: var(--color-bg-inverse);
+  color: var(--color-text-inverse);
+}
+
+/* Chapter markers removed in M4 revision — the editorial label was a
+   borrowed-from-nvg8 affordance that did not earn its overlap cost on
+   a 5-scene page. Removed from index.html for all scenes. */
+
+/* --- Word-reveal primitive ---
+   Each .word holds the actual text in a <span> and a .placeholder pill behind it.
+   On scroll, span fades 0→1, placeholder fades 1→0. The page never reflows. */
+.split { display: inline; }
+.split .word {
+  display: inline-block;
+  position: relative;
+  margin-right: 0.2em;
+}
+.split .word > span {
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+  /* Initial state (opacity 0, y 20) is set by JS so no-JS users see plain text. */
+}
+.split .word .placeholder {
+  position: absolute;
+  inset: 0.1em -0.1em;
+  background: var(--color-placeholder-light);
+  border-radius: var(--radius-pill);
+  pointer-events: none;
+  z-index: 0;
+}
+.scene--dark .split .word .placeholder { background: var(--color-placeholder-dark); }
+
+/* --- Display-XL typography (Hook + Invitation set-pieces) --- */
+.display-xl {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--text-display-xl);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  margin-block: var(--space-sm);
+}
+.display-xl .accent { color: var(--color-accent); }
+
+/* --- Scene 01 Hook ---
+   One big sentence: "Today, WeRoad's travelers search for [trip+strike] [groups]."
+   The strike animates across "trip", then "groups" reveals after it. */
+.hook__line {
+  /* display-xl handles font properties; just constrain wrap width. */
+  max-width: 100%;
+}
+.hook__strike-wrap {
+  display: inline-block;
+  position: relative;
+  white-space: nowrap;   /* keep "trip" intact across wrap */
+}
+.hook__strike-line {
+  position: absolute;
+  left: -0.05em; right: -0.05em;
+  top: 52%;
+  height: 0.08em;
+  background: var(--color-accent);
+  transform-origin: left center;
+  transform: scaleX(0);   /* JS scrubs to 1 across the Hook timeline */
+  border-radius: var(--radius-pill);
+}
+.hook__groups {
+  display: inline-block;
+  color: var(--color-accent);
+  /* Initial opacity 0 set by JS so no-JS users see the full sentence. */
+}
+.hook__sub {
+  margin-top: var(--space-xl);
+  font-size: var(--text-body-lg);
+  color: var(--color-text-tertiary);
+  max-width: var(--measure-narrow);
+}
+
+/* --- Scene 05 Invitation --- */
+.invitation__line {
+  /* Let the line wrap naturally to 2 lines on most viewports. */
+  max-width: 22ch;
+}
+.invitation__cta {
+  display: inline-block;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  text-decoration: none;
+  padding: var(--space-md) var(--space-xl);
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-subhead);
+  border-radius: var(--radius-pill);
+  margin-top: var(--space-xl);
+  transition: background var(--duration-fast) var(--ease-standard);
+}
+.invitation__cta:hover { background: var(--color-accent-strong); }
+.invitation__cta:focus-visible { outline: 2px solid var(--color-focus-ring); outline-offset: 4px; }
+.invitation__micro {
+  margin-top: var(--space-md);
+  font-size: var(--text-caption);
+  color: var(--color-text-tertiary);
+  max-width: var(--measure-narrow);
+}
+
+/* --- Scene 02 Truth ---
+   Four beats live in the same content column; only one is visible at a time.
+   As scroll progresses, each phase fades in, holds, then crossfades to the next.
+   This avoids overflow (no stacking) and gives each beat the full column to breathe.
+   Sofia (hesitating, bottom-anchored) sits in the right column across all phases. */
+#scene-truth { height: 700lvh; }
+/* Scene 02 — remove sticky bottom padding so Sofia (absolute) can anchor at
+   the actual screen bottom, not above the padding. */
+#scene-truth .scene__sticky { padding-bottom: 0; }
+
+.truth__layout {
+  width: 100%;
+  height: 100%;
+}
+@media (min-width: 1024px) {
+  .truth__layout {
+    padding-right: 42%;   /* reserve right side for Sofia with generous gap */
+  }
+}
+.truth__content {
+  position: relative;   /* phases absolutely position inside this */
+  width: 100%;
+  height: 100%;
+  min-height: 60vh;
+}
+.truth__phase {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-lg);
+  /* Initial opacity set by JS so no-JS users see all phases stacked (degradation). */
+}
+
+/* Phase 1: lede — problem in two parts. Main statement, then the kicker.
+   Kicker starts in ink and chars tween to coral on scroll (see splitAllChars). */
+.truth__lede,
+.truth__lede-accent {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-display-2);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  max-width: 22ch;
+  color: var(--color-text-primary);
+}
+.truth__lede-accent { margin-top: var(--space-lg); }
+
+/* Character spans (created at runtime by splitAllChars for [data-split-chars] elements).
+   Kept as inline (NOT inline-block) so the browser line-breaks at word boundaries only.
+   Used solely for color tweens — no transforms per char. */
+.char { display: inline; }
+
+/* Two review cards — stacked vertically so each gets the full column width. */
+.truth__reviews {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+/* Card design adopted from wematch_10.html (coworker reference):
+   white surface, 4px colored bar on the LEFT edge as the only saturation,
+   head row with trip name + stars, italic quote, attribution at foot.
+   Cleaner than tinted-wash — less "branded with semantics", more editorial. */
+.truth__review {
+  position: relative;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-xl);
+  padding-left: calc(var(--space-xl) + 4px);  /* account for the left bar */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.truth__review::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 4px;
+  border-top-left-radius: var(--radius-md);
+  border-bottom-left-radius: var(--radius-md);
+}
+.truth__review--positive::before { background: var(--color-positive); }
+.truth__review--critical::before { background: var(--color-critical); }
+
+.truth__review-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+.truth__review-trip {
+  font-size: var(--text-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+.truth__stars {
+  font-size: 0.875rem;
+  letter-spacing: 0.15em;
+  line-height: 1;
+}
+.truth__review--positive .truth__stars { color: var(--color-positive); }
+.truth__review--critical .truth__stars { color: var(--color-critical); }
+.truth__stars-empty { color: var(--color-border); }
+.truth__quote {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-regular);
+  font-style: italic;
+  font-size: var(--text-heading);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-text-primary);
+}
+.truth__attribution {
+  margin-top: auto;
+  font-size: var(--text-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+/* The 18% statistic — big number scrubs up from 0 on scroll. */
+.truth__stat {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-lg);
+  align-items: center;
+  max-width: var(--measure-wide);
+}
+.truth__stat-figure {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-bold);
+  font-size: clamp(5rem, 3rem + 8vw, 12rem);   /* much bigger — full phase to itself */
+  line-height: 0.9;
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+.truth__stat-pct { font-size: 0.5em; color: var(--color-text-tertiary); }
+.truth__stat-copy {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-heading);
+  line-height: var(--leading-snug);
+  color: var(--color-text-primary);
+  max-width: 18ch;
+}
+
+/* Problem statement — two sentences. First in coral (the diagnosis),
+   second in default ink (the consequence). Each on its own line, word-revealed. */
+.truth__problem {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--text-display-2);   /* 32 → 60 — smaller than display-xl */
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  max-width: 30ch;
+  margin-top: var(--space-md);
+}
+.truth__problem-accent,
+.truth__problem-rest { display: block; }
+/* Starts in ink; chars tween to coral on scroll (same as lede-accent). */
+.truth__problem-accent { color: var(--color-text-primary); }
+.truth__problem-rest { color: var(--color-text-primary); margin-top: var(--space-2xs); }
+
+/* Sofia — absolute, anchored at the actual screen bottom (sticky bottom edge).
+   Sits in the right side of the sticky, content has padding-right to avoid overlap. */
+.truth__sofia {
+  display: none;
+}
+@media (min-width: 1024px) {
+  .truth__sofia {
+    position: absolute;
+    bottom: 0;
+    right: var(--page-gutter);
+    width: 32%;
+    max-width: 460px;
+    height: 92lvh;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .truth__sofia img {
+    max-height: 100%;
+    width: auto;
+    object-fit: contain;
+    object-position: center bottom;
+  }
+}
+
+/* --- Scene 03 Journey ---
+   Four phases: Entrance → 3a Read → 3b Match → 3c Explain.
+   Sofia (curious) sits absolutely bottom-right, like Scene 02. */
+#scene-journey { height: 1000lvh; }
+#scene-journey .scene__sticky { padding-bottom: 0; }
+
+.journey__layout { width: 100%; height: 100%; }
+@media (min-width: 1024px) {
+  .journey__layout { padding-right: 42%; }
+}
+.journey__content {
+  --journey-phase-top: clamp(4.75rem, 14lvh, 7.25rem);
+  --journey-matchy-entrance-top: calc(var(--journey-phase-top) + clamp(13.75rem, 25lvh, 16rem));
+  --journey-matchy-step-top: calc(var(--journey-phase-top) + clamp(5.75rem, 11lvh, 7rem));
+  --journey-artifact-gap: clamp(13rem, 24lvh, 16rem);
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 60vh;
+}
+.journey__phase {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: var(--space-md);
+  padding-top: var(--journey-phase-top);
+}
+
+/* Common typography for journey titles and bodies. */
+.journey__title {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-display-2);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-text-primary);
+  max-width: 18ch;
+}
+
+/* Phase 1 — Entrance. Single declarative line, WeMatch in coral. */
+.journey__entrance {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--text-display-1);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-text-primary);
+  max-width: 16ch;
+}
+.journey__entrance--solo { /* no top margin needed; only one line */ }
+.journey__brand { color: var(--color-accent); }
+
+/* Engineering register — behavioral_dna artifact.
+   Signals the agent has a structure without adding separate step subtitles. */
+.journey__dna {
+  margin-top: var(--journey-artifact-gap);
+  padding: var(--space-md);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-subtle);
+  max-width: min(100%, 38rem);
+}
+.journey__dna-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+.journey__dna-label {
+  font-family: ui-monospace, 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  font-size: var(--text-micro);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+.journey__dna-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-size: var(--text-micro);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+.journey__dna-status::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 0 0 rgba(247, 55, 79, 0.32);
+  animation: dna-status-pulse 1.7s ease-out infinite;
+}
+.journey__dna-sliders {
+  display: grid;
+  gap: var(--space-sm);
+}
+.journey__dna-slider {
+  display: grid;
+  gap: var(--space-2xs);
+}
+.journey__dna-slider-label {
+  font-size: var(--text-caption);
+  line-height: var(--leading-snug);
+  color: var(--color-text-secondary);
+}
+.journey__dna-track {
+  position: relative;
+  height: 0.55rem;
+  overflow: visible;
+  background: var(--color-bg-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+}
+.journey__dna-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--target);
+  background: var(--color-accent);
+  border-radius: inherit;
+}
+.journey__dna-knob {
+  position: absolute;
+  top: 50%;
+  left: var(--target);
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: var(--color-surface);
+  border: 3px solid var(--color-accent);
+  box-shadow: var(--shadow-subtle);
+  transform: translate(-50%, -50%);
+}
+@keyframes dna-status-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(247, 55, 79, 0.32); }
+  100% { box-shadow: 0 0 0 0.65rem rgba(247, 55, 79, 0); }
+}
+
+/* Phase 3 — Match cards row. */
+.journey__matches {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+  margin-top: var(--journey-artifact-gap);
+  max-width: min(100%, 42rem);
+}
+@media (min-width: 768px) {
+  .journey__matches { grid-template-columns: repeat(3, 1fr); align-items: center; }
+}
+.journey__match {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  transition: transform var(--duration-base) var(--ease-out);
+}
+.journey__match--top {
+  border-color: var(--color-accent);
+  border-width: 1px;
+}
+@media (min-width: 768px) {
+  .journey__match--top { transform: scale(1.05); }
+}
+.journey__match-score {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--text-display-1);
+  line-height: 1;
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-accent);
+}
+.journey__match-trip {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-heading);
+  line-height: var(--leading-snug);
+  color: var(--color-text-primary);
+}
+.journey__match-meta {
+  font-size: var(--text-caption);
+  color: var(--color-text-tertiary);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+.journey__match-reason {
+  font-size: var(--text-caption);
+  color: var(--color-text-primary);
+  line-height: var(--leading-snug);
+  margin-top: auto;
+}
+
+/* Phase 4 — Why panel. */
+.journey__why {
+  margin-top: var(--journey-artifact-gap);
+  max-width: min(100%, 40rem);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+.journey__why-topbar {
+  min-height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: 0 var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+.journey__why-title {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-caption);
+  color: var(--color-text-primary);
+}
+.journey__why-close {
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--color-text-tertiary);
+}
+.journey__why-score {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-bg-sunken);
+  border-bottom: 1px solid var(--color-border);
+}
+.journey__why-score-num {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--text-display-2);
+  line-height: 0.9;
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-accent);
+}
+.journey__why-score-label {
+  font-size: var(--text-caption);
+  color: var(--color-text-secondary);
+  padding-bottom: 0.15rem;
+}
+.journey__why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+}
+.journey__why-card {
+  min-height: 6.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.journey__why-card-label {
+  font-family: ui-monospace, 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  font-size: var(--text-micro);
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.journey__why-card strong {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-body);
+  line-height: var(--leading-snug);
+  color: var(--color-text-primary);
+}
+/* Sofia — absolute bottom-right, mirroring Scene 02's pattern. */
+.journey__sofia { display: none; }
+@media (min-width: 1024px) {
+  .journey__sofia {
+    position: absolute;
+    bottom: 0;
+    right: var(--page-gutter);
+    width: 32%;
+    max-width: 460px;
+    height: 92lvh;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .journey__sofia-image {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    max-height: 100%;
+    width: auto;
+    object-fit: contain;
+    object-position: center bottom;
+    transform: translateX(-50%);
+  }
+  .journey__sofia-image--surprised {
+    opacity: 0;
+  }
+}
+
+/* --- Matchy — persistent assistant shell under the Scene 03 title ---
+   Visual language follows matchy-design-board.svg: detached avatar plus
+   separate conversation surface. */
+.journey__matchy {
+  position: absolute;
+  top: var(--journey-matchy-entrance-top);
+  left: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  width: min(100%, calc(38rem + 34px + var(--space-sm)));
+  z-index: 4;
+  opacity: 0;              /* JS reveals */
+  transform: translateY(12px);
+}
+.journey__matchy-bubble {
+  position: relative;
+  flex: 1 1 auto;
+  width: min(100%, 38rem);
+  max-width: 38rem;
+  min-width: 0;
+  background:
+    linear-gradient(#FFFFFF, #FFFFFF) padding-box,
+    linear-gradient(135deg, rgba(247, 55, 79, 0.55), rgba(31, 27, 22, 0.14)) border-box;
+  border: 2px solid transparent;
+  border-radius: 17px;
+  box-shadow: var(--shadow-card);
+  transition:
+    transform var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-standard);
+}
+.journey__matchy-body {
+  position: relative;
+  min-height: 6.25rem;
+  padding: var(--space-md);
+}
+.journey__matchy-avatar {
+  position: relative;
+  flex: 0 0 auto;
+  margin-top: 0.35rem;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 2;
+}
+/* Soft halo that pulses behind the icon — visual proxy for "active agent". */
+.journey__matchy-avatar::after {
+  content: "";
+  position: absolute;
+  inset: -18%;
+  background: var(--color-accent);
+  border-radius: 12px;
+  opacity: 0.16;
+  animation: matchy-pulse 2.6s ease-out infinite;
+  z-index: 0;
+}
+.journey__matchy-avatar img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: block;
+  transition:
+    transform var(--duration-base) var(--ease-out),
+    filter var(--duration-base) var(--ease-standard);
+}
+.journey__matchy-copy {
+  position: absolute;
+  inset: var(--space-md);
+  max-width: 52ch;
+  font-size: var(--text-body);
+  line-height: var(--leading-normal);
+  color: var(--color-text-primary);
+  opacity: 0;
+}
+.journey__matchy-char {
+  opacity: 1;
+}
+.journey__matchy-copy--entrance {
+  opacity: 1;
+}
+.journey__matchy:hover .journey__matchy-avatar img,
+.journey__matchy:focus-within .journey__matchy-avatar img,
+.journey__matchy.is-engaged .journey__matchy-avatar img {
+  transform: translateY(-2px) rotate(-4deg) scale(1.04);
+  filter: drop-shadow(0 8px 16px rgba(31, 27, 22, 0.12));
+}
+.journey__matchy:hover .journey__matchy-bubble,
+.journey__matchy:focus-within .journey__matchy-bubble,
+.journey__matchy.is-engaged .journey__matchy-bubble {
+  box-shadow:
+    var(--shadow-card),
+    0 0 0 1px rgba(247, 55, 79, 0.35);
+  transform: translateY(-1px);
+}
+.journey__matchy.is-engaged .journey__matchy-avatar img {
+  animation: matchy-nudge 0.7s var(--ease-out);
+}
+.journey__matchy-avatar:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 4px;
+}
+@keyframes matchy-pulse {
+  0%   { transform: scale(0.9); opacity: 0.22; }
+  100% { transform: scale(1.65); opacity: 0; }
+}
+@keyframes matchy-nudge {
+  0%, 100% { transform: translateY(-2px) rotate(-4deg) scale(1.04); }
+  32%      { transform: translateY(-4px) rotate(5deg) scale(1.09); }
+  64%      { transform: translateY(-1px) rotate(-2deg) scale(1.05); }
+}
+
+/* --- Placeholder scenes (02/03/04) — empty 300lvh sentinels --- */
+.scene--placeholder .scene__sticky p {
+  color: var(--color-text-tertiary);
+  font-style: italic;
+  text-align: center;
+}
+
+/* --- Footer (after the last scene) --- */
+.colophon {
+  background: var(--color-bg-inverse);
+  color: var(--color-text-inverse);
+  padding: var(--space-xl) var(--page-gutter);
+  font-size: var(--text-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+.colophon__wrap {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  opacity: 0.7;
+}
+.colophon a {
+  color: var(--color-text-inverse);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--duration-fast);
+}
+.colophon a:hover { border-bottom-color: var(--color-accent); }
+
+/* --- Mobile fallback (< 1024px) ---
+   Sticky 300lvh pinning is unstable on iOS Safari due to URL-bar collapse.
+   Mobile reverts to normal-flow blocks with IO-triggered reveals. */
+@media (max-width: 1023px) {
+  .scene { height: auto; }
+  .scene__sticky {
+    position: static;
+    height: auto;
+    min-height: auto;
+    padding-block: var(--space-3xl);
+  }
+  .scene--overlap { margin-top: 0; }
+  /* Scene 02 phases under mobile: stack in normal flow, not absolute. */
+  .truth__phase { position: static; opacity: 1; }
+  .truth__content { height: auto; min-height: 0; display: flex; flex-direction: column; gap: var(--space-2xl); }
+  #scene-truth { height: auto; }
+  /* Scene 03 phases under mobile: same treatment. */
+  .journey__phase { position: static; opacity: 1; padding-top: 0; }
+  .journey__content { height: auto; min-height: 0; display: flex; flex-direction: column; gap: var(--space-2xl); }
+  #scene-journey { height: auto; }
+  .journey__match--top { transform: none; }
+  .journey__dna,
+  .journey__matches,
+  .journey__why { margin-top: var(--space-md); }
+  .journey__why-grid { grid-template-columns: 1fr; }
+  .journey__why-card { min-height: 0; }
+  /* Matchy on mobile: static assistant recap between the entrance and details. */
+  .journey__matchy {
+    position: static;
+    width: 100%;
+    margin-top: 0;
+    margin-bottom: var(--space-xs);
+    opacity: 1;
+    transform: none;
+  }
+  .journey__matchy-avatar {
+    position: static;
+    margin-left: 0;
+    margin-top: 0.35rem;
+    width: 34px;
+    height: 34px;
+  }
+  .journey__matchy-bubble {
+    transform: none;
+  }
+  .journey__matchy-body {
+    min-height: 0;
+  }
+  .journey__matchy-copy {
+    position: static;
+    opacity: 1;
+    display: block;
+    margin-top: 0;
+  }
+  .journey__matchy-copy + .journey__matchy-copy {
+    padding-top: var(--space-xs);
+    margin-top: var(--space-xs);
+    border-top: 1px solid var(--color-border);
+  }
+}
+
+/* --- Reduced motion — leave everything at end state --- */
+@media (prefers-reduced-motion: reduce) {
+  .split .word > span      { opacity: 1 !important; transform: none !important; }
+  .split .word .placeholder { opacity: 0 !important; }
+  .char                    { opacity: 1 !important; transform: none !important; }
+  /* Accent chars end coral, not ink. */
+  .truth__lede-accent .char,
+  .truth__lede-accent,
+  .truth__problem-accent .char,
+  .truth__problem-accent   { color: var(--color-accent) !important; }
+  .hook__strike-line       { transform: scaleX(1) !important; }
+  .hook__groups,
+  .hook__sub,
+  .invitation__cta,
+  .invitation__micro,
+  .truth__review--positive,
+  .truth__review--critical,
+  .truth__stat-figure,
+  .truth__stat-copy,
+  .truth__phase,
+  .journey__phase,
+  .journey__match,
+  .journey__why,
+  .journey__matchy,
+  .journey__matchy-avatar,
+  .journey__matchy-bubble,
+  .journey__matchy-copy    { opacity: 1 !important; transform: none !important; }
+  .journey__matchy-avatar::after { animation: none !important; opacity: 0 !important; }
+  /* Phase swap requires JS — under reduced motion, let phases stack in normal flow. */
+  .truth__phase,
+  .journey__phase          { position: static !important; padding-top: 0 !important; }
+  .truth__content,
+  .journey__content        { display: flex; flex-direction: column; gap: var(--space-2xl); }
+  .journey__dna,
+  .journey__matches,
+  .journey__why            { margin-top: var(--space-md) !important; }
+  .journey__matchy         { position: static !important; width: 100% !important; margin-top: 0; }
+  .journey__matchy-avatar  { position: static !important; width: 34px !important; height: 34px !important; margin-left: 0; margin-top: 0.35rem; }
+  .journey__matchy-bubble  { margin-top: 0 !important; }
+  .journey__matchy-body    { min-height: 0 !important; }
+  .journey__matchy-copy    { position: static !important; margin-top: var(--space-xs); }
+  .journey__matchy-char    { opacity: 1 !important; }
+  .journey__dna-fill       { width: var(--target) !important; }
+  .journey__dna-knob       { left: var(--target) !important; }
+  .journey__dna-status::before { animation: none !important; }
+  #scene-truth             { height: auto !important; }
+  #scene-truth .scene__sticky { position: static !important; height: auto !important; padding-block: var(--space-3xl); }
+  #scene-journey           { height: auto !important; }
+  #scene-journey .scene__sticky { position: static !important; height: auto !important; padding-block: var(--space-3xl); }
+}

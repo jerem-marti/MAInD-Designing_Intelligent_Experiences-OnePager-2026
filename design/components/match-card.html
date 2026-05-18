@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WeMatch — Component: Match Card</title>
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-normal);
+    color: var(--color-text-primary);
+    background: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+    padding: var(--section-gap-tight) var(--page-gutter);
+  }
+  .wrap { max-width: var(--content-max); margin-inline: auto; }
+
+  .label {
+    font-size: var(--text-micro);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--space-lg);
+  }
+
+  /* Three editorial cards, foregrounded by score, no product chrome.
+     The top match (87%) gets a coral hairline; the rest carry the
+     neutral border. The grid collapses to a single column at 768px. */
+  .row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+  @media (max-width: 768px) {
+    .row { grid-template-columns: 1fr; }
+  }
+
+  .match {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+  .match--top { border-color: var(--color-accent); }
+
+  .match__score {
+    font-family: var(--font-display);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--text-display-2);
+    line-height: 1;
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-accent);
+  }
+  .match__score .pct {
+    font-size: 0.45em;
+    letter-spacing: 0;
+    margin-left: 0.05em;
+  }
+
+  /* The reason line — plain language, the people-fit in words.
+     This is the WeMatch signature line called out in script v8. */
+  .match__reason {
+    font-size: var(--text-caption);
+    color: var(--color-text-primary);
+    line-height: var(--leading-snug);
+  }
+
+  .match__trip {
+    font-family: var(--font-display);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--text-subhead);
+    line-height: var(--leading-snug);
+  }
+  .match__trip .meta {
+    font-family: var(--font-body);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--text-caption);
+    color: var(--color-text-secondary);
+    margin-left: var(--space-2xs);
+  }
+
+  .match__source {
+    margin-top: auto;
+    font-size: var(--text-micro);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="label">Section 03b — the WeRoad search page, re-ranked by group fit</p>
+
+    <div class="row">
+      <article class="match match--top">
+        <p class="match__score">87<span class="pct">%</span></p>
+        <p class="match__reason">culture-driven · slow pace · mid-thirties mix</p>
+        <h3 class="match__trip">Patagonia <span class="meta">· 12 days</span></h3>
+        <p class="match__source">via WeRoad</p>
+      </article>
+
+      <article class="match">
+        <p class="match__score">79<span class="pct">%</span></p>
+        <p class="match__reason">active days · early starts · a social group</p>
+        <h3 class="match__trip">Jordan 360° <span class="meta">· 8 days</span></h3>
+        <p class="match__source">via WeRoad</p>
+      </article>
+
+      <article class="match">
+        <p class="match__score">71<span class="pct">%</span></p>
+        <p class="match__reason">big-group energy · packed itinerary · fast pace</p>
+        <h3 class="match__trip">Vietnam <span class="meta">· 11 days</span></h3>
+        <p class="match__source">via WeRoad</p>
+      </article>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,242 @@
+/* ============================================================
+   WeMatch — Design Tokens
+   Phase 1 deliverable. The source of truth for Phase 2.
+
+   Structure:
+   1. Primitives   — raw values, named by what they are.
+   2. Semantic     — what the page actually uses, named by role.
+   Phase 2 should consume the SEMANTIC tokens. Primitives exist so
+   the underlying values stay legible and adjustable in one place.
+
+   Register: editorial, restrained, WeRoad-adjacent. The system is
+   deliberately small. If a token isn't used, it was cut on purpose.
+   ============================================================ */
+
+:root {
+
+  /* ==========================================================
+     1. PRIMITIVES
+     ========================================================== */
+
+  /* --- Neutrals: warm, paper-like. Not a single grey is cool. ---
+     The page lives on warm cream, not white. White is reserved for
+     cards that need to lift off the page. */
+  --paper-50:  #FEFCF9;  /* near-white, faintly warm — card surface */
+  --paper-100: #FAF6F0;  /* the page base — warm cream */
+  --paper-200: #F2EBE1;  /* sunken cream — insets, quiet panels */
+  --paper-300: #E6DCCE;  /* hairline borders, dividers */
+
+  --ink-900: #1F1B16;    /* primary text — warm near-black, never #000 */
+  --ink-600: #6B6258;    /* secondary text — warm grey */
+  --ink-400: #9A9085;    /* tertiary text — captions, attributions */
+
+  /* --- Accent: WeRoad's coral-red. ---
+     NOTE — VERIFY THIS HEX. weroad.com could not be read at the CSS
+     level during research; this is a flagged approximation in the
+     researched range (#FF4D4D – #F7374F). Eyedrop the live site and
+     correct here before Phase 2 hardens. Everything else inherits it. */
+  --coral-500: #F7374F;  /* the accent */
+  --coral-600: #D92740;  /* deeper — hover / pressed states */
+  --coral-100: #FBE4E4;  /* a barely-there wash — use almost never */
+
+  /* --- Functional hues: review-card star glyphs ONLY. ---
+     Muted and editorial on purpose — bright UI green/red would read
+     as "tech product". These are not general-purpose accents. The
+     5★/1★ contrast is also carried by star count and composition;
+     colour is a quiet reinforcement, not the whole signal. */
+  --green-700: #3D6B4A;  /* positive — Marcello 5★ */
+  --brick-700: #A23E2E;  /* critical — FZ 1★ (distinct from brand coral) */
+
+  /* Surface tints for tinted-paper review cards. Wash sits on the
+     cream field as a low-saturation backdrop; edge is the matching
+     hairline border tone. Calibrated against #FAF6F0. */
+  --green-100: #EEF2EA;  /* positive card surface wash */
+  --green-300: #C5D2BC;  /* positive card edge tint */
+  --brick-100: #F4E8E5;  /* critical card surface wash */
+  --brick-300: #DCC0B9;  /* critical card edge tint */
+
+
+  /* ==========================================================
+     2. SEMANTIC TOKENS — consume these
+     ========================================================== */
+
+  /* --- Colour: surfaces & text --- */
+  --color-bg:             var(--paper-100);
+  --color-bg-sunken:      var(--paper-200);
+  --color-bg-inverse:     var(--ink-900);   /* the rare dark section */
+  --color-surface:        var(--paper-50);  /* cards lifting off the page */
+  --color-border:         var(--paper-300);
+
+  --color-text-primary:   var(--ink-900);
+  --color-text-secondary: var(--ink-600);
+  --color-text-tertiary:  var(--ink-400);
+  --color-text-inverse:   var(--paper-100); /* text on --color-bg-inverse */
+
+  /* --- Colour: accent & function --- */
+  --color-accent:         var(--coral-500);
+  --color-accent-strong:  var(--coral-600); /* hover / pressed */
+  --color-accent-wash:    var(--coral-100);
+  --color-on-accent:      var(--paper-50);  /* text/icon on a coral fill */
+
+  --color-positive:       var(--green-700); /* review stars only */
+  --color-critical:       var(--brick-700); /* review stars only */
+
+  /* --- Colour: review-card surface tints ---
+     Low-saturation washes calibrated against the cream field. The
+     contrast is legible at scan-speed (green vs red before reading),
+     but the page never reads as "branded with semantics". The hairline
+     edge picks up a matching tint instead of the neutral border. */
+  --color-positive-wash: var(--green-100);
+  --color-critical-wash: var(--brick-100);
+  --color-positive-edge: var(--green-300);
+  --color-critical-edge: var(--brick-300);
+
+
+  /* Word-reveal placeholders — pill colour behind unrevealed words.
+     Light variant for cream sections, dark variant for ink sections. */
+  --color-placeholder-light: rgba(31, 27, 22, 0.12);
+  --color-placeholder-dark:  rgba(254, 252, 249, 0.15);
+
+  --color-focus-ring:     var(--coral-500); /* keyboard focus — a11y */
+
+
+  /* --- Typography: families ---
+     One family carries the whole page. Two near-identical sans serifs
+     read as indecision; the system stays small on purpose. General
+     Sans handles display (medium/semibold) and body (regular) inside
+     WeRoad's typographic family. */
+  --font-display: 'General Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body:    'General Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --font-weight-regular:  400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;  /* V3 — display register at viewport scale */
+
+  /* --- Typography: scale ---
+     Fluid where it matters (display flexes with viewport), fixed
+     where it shouldn't drift (body, captions). Body resolves to
+     17px on small screens, 19px on desktop — the brief's floor.
+     Built on a 16px root; values in rem. */
+  --text-display-xl: clamp(3rem, 2rem + 5vw, 7rem);          /* 48 → 112 — V3 Hook/Close */
+  --text-display-1: clamp(2.75rem, 1.6rem + 5.6vw, 5.5rem);  /* 44 → 88  — the Hook */
+  --text-display-2: clamp(2rem,   1.3rem + 3.2vw, 3.75rem);  /* 32 → 60  — section openings */
+  --text-heading:   clamp(1.5rem, 1.2rem + 1.3vw, 2rem);     /* 24 → 32  — sub-headings */
+  --text-subhead:   1.25rem;                                  /* 20      — card titles */
+  --text-body-lg:   clamp(1.1875rem, 1.1rem + 0.4vw, 1.375rem); /* 19 → 22 — lead paragraphs */
+  --text-body:      clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);  /* 17 → 19 — default body */
+  --text-caption:   0.9375rem;                                /* 15      — craft captions */
+  --text-micro:     0.8125rem;                                /* 13      — attributions, eyebrows */
+
+  /* --- Typography: line-height ---
+     Brief: 1.4–1.6 body, tighter for display. */
+  --leading-tight:   1.05;  /* display */
+  --leading-snug:    1.2;   /* headings */
+  --leading-normal:  1.5;   /* body */
+  --leading-relaxed: 1.65;  /* lead paragraphs, generous passages */
+
+  /* --- Typography: letter-spacing --- */
+  --tracking-tight:  -0.02em;  /* large display — tightens as it grows */
+  --tracking-normal: 0;
+  --tracking-wide:   0.08em;   /* micro labels, eyebrows, small caps */
+
+  /* --- Typography: measure (line length) ---
+     Editorial readability. Body copy should not run full-width. */
+  --measure-narrow: 38ch;  /* captions, pull-quotes */
+  --measure:        62ch;  /* default body column */
+  --measure-wide:   74ch;  /* lead passages */
+
+
+  /* --- Spacing scale ---
+     Base unit 4px. Deliberately jumps wide at the top — the brief
+     asks for more whitespace than expected, and the Hook needs to
+     sit in a large empty field. */
+  --space-3xs: 0.25rem;  /*   4 */
+  --space-2xs: 0.5rem;   /*   8 */
+  --space-xs:  0.75rem;  /*  12 */
+  --space-sm:  1rem;     /*  16 */
+  --space-md:  1.5rem;   /*  24 */
+  --space-lg:  2.5rem;   /*  40 */
+  --space-xl:  4rem;     /*  64 */
+  --space-2xl: 6rem;     /*  96 */
+  --space-3xl: 9rem;     /* 144 */
+  --space-4xl: 14rem;    /* 224 — dramatic whitespace, Hook field */
+
+  /* --- Layout ---
+     Section rhythm and page gutters flex with viewport. */
+  --section-gap:           clamp(6rem, 4rem + 9vw, 14rem);   /* vertical space between sections */
+  --section-gap-tight:     clamp(3rem, 2rem + 4vw, 6rem);    /* within-section beats */
+  --page-gutter:           clamp(1.5rem, 0.5rem + 4vw, 6rem);/* inline page padding */
+  --content-max:           72rem;   /* 1152px — full content width */
+  --content-max-text:      44rem;   /* 704px  — text-led blocks stay narrow */
+
+
+  /* --- Border radius ---
+     Modest. WeRoad sits around 4–8px; the editorial register keeps
+     it restrained — nothing on this page should look bubbly. */
+  --radius-none: 0;
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   14px;     /* trip / review cards */
+  --radius-pill: 999px;    /* match-score chip, the single CTA */
+
+
+  /* --- Elevation ---
+     Prefer borders over shadows. These exist for the few cards that
+     must lift off the cream (trip/match cards). Shadows are warm-
+     tinted — built from ink, never pure black — so they sit in the
+     palette instead of punching a cool hole in it. */
+  --shadow-none:   none;
+  --shadow-subtle: 0 1px 2px rgba(31, 27, 22, 0.04),
+                   0 2px 6px rgba(31, 27, 22, 0.05);
+  --shadow-card:   0 2px 4px rgba(31, 27, 22, 0.04),
+                   0 8px 28px rgba(31, 27, 22, 0.07);
+
+
+  /* --- Motion ---
+     The brief: motion serves the story. Durations are calm — nothing
+     snappy-techy. Easings favour a soft settle (expo-style out). */
+  --duration-fast:   160ms;  /* hovers, small state changes */
+  --duration-base:   280ms;  /* standard transitions */
+  --duration-slow:   520ms;  /* deliberate reveals */
+  --duration-scroll: 820ms;  /* scroll-driven entrance beats */
+
+  --ease-out:      cubic-bezier(0.22, 1, 0.36, 1);    /* reveals — soft settle */
+  --ease-in-out:   cubic-bezier(0.65, 0, 0.35, 1);    /* moves between two states */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);      /* general-purpose */
+
+
+  /* --- Z-index ---
+     Small and named. Section 03's sticky text needs a defined layer. */
+  --z-base:    0;
+  --z-raised:  10;   /* cards lifting on hover */
+  --z-sticky:  100;  /* pinned narration in section 03 */
+  --z-overlay: 1000; /* the 3c "why" panel */
+
+
+  /* --- Breakpoints (REFERENCE ONLY) ---
+     CSS custom properties cannot be used inside @media queries.
+     These document the system; Phase 2 writes the literal px values
+     in media queries. 375px is the MUST-support floor. */
+  --bp-sm:  375px;   /* mobile floor — design for this first */
+  --bp-md:  768px;   /* tablet */
+  --bp-lg:  1024px;  /* small desktop */
+  --bp-xl:  1280px;  /* desktop */
+}
+
+
+/* ============================================================
+   Reduced motion — craft, not compliance.
+   Collapses durations so transitions resolve effectively instantly
+   while still being "applied". Phase 2 should ALSO gate GSAP
+   ScrollTrigger setups on this query — token overrides alone don't
+   stop JS-driven motion.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast:   1ms;
+    --duration-base:   1ms;
+    --duration-slow:   1ms;
+    --duration-scroll: 1ms;
+  }
+}

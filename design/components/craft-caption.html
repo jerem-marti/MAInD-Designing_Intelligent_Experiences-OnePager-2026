@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WeMatch — Component: Craft Caption</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-normal);
+    color: var(--color-text-primary);
+    background: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+    padding: var(--section-gap-tight) var(--page-gutter);
+  }
+  .wrap { max-width: var(--content-max-text); margin-inline: auto; }
+
+  /* Shown in context on purpose: the craft caption only works if it
+     reads as a quiet aside ATTACHED to a moment — never as a section
+     header, never a "Safe. Private. Trusted." strip. The surrounding
+     paragraph below is here so that quality is inspectable. */
+  .context-lead {
+    font-family: var(--font-display);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--text-heading);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: var(--space-md);
+  }
+  .context-body {
+    font-size: var(--text-body);
+    color: var(--color-text-secondary);
+    max-width: var(--measure);
+  }
+
+  /* THE COMPONENT — the craft caption itself. */
+  .caption {
+    margin-top: var(--space-lg);
+    padding-left: var(--space-md);
+    border-left: 2px solid var(--color-accent);
+    font-size: var(--text-caption);
+    color: var(--color-text-tertiary);
+    max-width: var(--measure-narrow);
+  }
+
+  /* The three captions across section 03 share this exact treatment —
+     shown stacked here only to confirm they sit as a quiet family.
+     On the page they live apart, one per moment. */
+  .specimen-set {
+    margin-top: var(--section-gap-tight);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+  .specimen-set .label {
+    font-size: var(--text-micro);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- In context — caption attached to its moment (3a) -->
+    <p class="context-lead">It reads her.</p>
+    <p class="context-body">
+      WeMatch isn't asking where Sofia wants to go. It's getting to know how she
+      travels — what she says, and what she does — and turning that into a profile
+      built around her people, not her keywords.
+    </p>
+    <p class="caption">
+      She's never asked to fill out a form. WeMatch reads what she shares,
+      nothing more.
+    </p>
+
+    <!-- The family — all three section-03 captions, one treatment -->
+    <div class="specimen-set">
+      <p class="label">The three captions — one quiet treatment</p>
+      <p class="caption">She's never asked to fill out a form. WeMatch reads what she shares, nothing more.</p>
+      <p class="caption">A trip that's perfect for Sofia but wrong for the group is not a match.</p>
+      <p class="caption">Every match comes with a reason. She can always ask why — or push back.</p>
+    </div>
+
+  </div>
+</body>
+</html>

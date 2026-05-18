@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WeMatch — Component: Hook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-normal);
+    color: var(--color-text-primary);
+    background: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* The Hook sits in a large empty field. The line is placed low and
+     left of centre — the eye lands on whitespace first, then the line.
+     Nothing else is on screen. */
+  .hook {
+    min-height: 100svh;
+    padding: var(--space-2xl) var(--page-gutter) var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;   /* line settles toward the lower third */
+  }
+  .hook__line {
+    font-family: var(--font-display);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--text-display-1);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+    max-width: 20ch;             /* forces an editorial wrap */
+    text-wrap: balance;
+  }
+  /* The single accent moment — one word carries the coral. */
+  .hook__line em {
+    font-style: normal;
+    color: var(--color-accent);
+  }
+  /* A quiet scroll cue — small enough not to compete. */
+  .hook__cue {
+    margin-top: var(--space-2xl);
+    font-size: var(--text-micro);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+  }
+</style>
+</head>
+<body>
+  <main class="hook">
+    <h1 class="hook__line">
+      The hardest part of group travel isn't where you go. It's <em>who</em> you go with.
+    </h1>
+    <p class="hook__cue">Scroll</p>
+  </main>
+</body>
+</html>

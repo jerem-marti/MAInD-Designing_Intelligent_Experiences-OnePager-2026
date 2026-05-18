@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WeMatch — Component: Review Card</title>
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-normal);
+    color: var(--color-text-primary);
+    background: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+    padding: var(--section-gap-tight) var(--page-gutter);
+  }
+  .wrap { max-width: var(--content-max); margin-inline: auto; }
+
+  /* The 02 pair sits side by side — the contrast is the argument.
+     The 04 Sofia card uses the SAME component: that visual rhyme is
+     how the page closes its loop. */
+  .pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-2xl);
+  }
+  @media (max-width: 768px) {
+    .pair { grid-template-columns: 1fr; }
+  }
+  .closing { max-width: 34rem; }
+
+  /* --- The card --- */
+  .review {
+    /* Surface is set by the polarity modifier; default kept as fallback. */
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+  .review--positive {
+    background: var(--color-positive-wash);
+    border-color: var(--color-positive-edge);
+  }
+  .review--critical {
+    background: var(--color-critical-wash);
+    border-color: var(--color-critical-edge);
+  }
+  .review--positive .review__stars { color: var(--color-positive); }
+  .review--critical .review__stars { color: var(--color-critical); }
+  .review__stars {
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+    line-height: 1;
+  }
+  .review__stars .empty { color: var(--color-border); }
+
+  .review__quote {
+    font-family: var(--font-display);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--text-subhead);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-tight);
+  }
+  .closing .review__quote {
+    font-size: var(--text-heading);
+  }
+  .review__attribution {
+    font-size: var(--text-micro);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    margin-top: auto;
+  }
+
+  .label {
+    font-size: var(--text-micro);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--space-md);
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- SECTION 02 — the polarised pair, English pull-quotes verbatim -->
+    <p class="label">Section 02 — two voices, one variable</p>
+    <div class="pair">
+      <article class="review review--positive">
+        <div class="review__stars" aria-label="5 out of 5 stars">★★★★★</div>
+        <p class="review__quote">"I left alone, without knowing anyone. I came back with a wealth of experiences and people I'll hardly forget."</p>
+        <p class="review__attribution">Marcello · Trustpilot · Morocco</p>
+      </article>
+
+      <article class="review review--critical">
+        <div class="review__stars" aria-label="1 out of 5 stars">★<span class="empty">★★★★</span></div>
+        <p class="review__quote">"I witnessed toxic dynamics within the group that I had to endure from the second day of the trip."</p>
+        <p class="review__attribution">FZ · Trustpilot · China</p>
+      </article>
+    </div>
+
+    <!-- SECTION 04 — the same card, signed Sofia. The rhyme is the point. -->
+    <p class="label">Section 04 — the same shape, signed Sofia</p>
+    <div class="closing">
+      <article class="review review--positive">
+        <div class="review__stars" aria-label="5 out of 5 stars">★★★★★</div>
+        <p class="review__quote">"I've done a few of these now. One was magical. One was just fine. I came back from Portugal a week ago and I already know which one this was. On day two, eating pão com tomate with Marco, I just knew. The wine bar in Alfama wasn't on the itinerary. None of the best parts were."</p>
+        <p class="review__attribution">Sofia · Trustpilot</p>
+      </article>
+    </div>
+
+  </div>
+</body>
+</html>
