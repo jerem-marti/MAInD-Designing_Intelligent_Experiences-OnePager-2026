@@ -570,7 +570,7 @@
   <section class="segment invitation" id="invitation" aria-label="Invitation">
     <p class="invitation__echo">You're not choosing a destination. You're choosing your <span class="accent">people</span>.</p>
     <div>
-      <a id="cta" class="cta" href="#">Meet WeMatch</a>
+      <a id="cta" class="cta" href="https://maind-wematch.vercel.app/" rel="noopener" target="_blank">Meet WeMatch</a>
       <p class="invitation__micro">A live preview. Real agent. No signup.</p>
     </div>
   </section>
@@ -729,16 +729,6 @@
     window.addEventListener('resize', update, { passive: true });
     update();
   })();
-</script>
-
-<script type="module">
-  import { WEMATCH_AGENT_URL } from './config.js';
-  const cta = document.getElementById('cta');
-  if (cta && WEMATCH_AGENT_URL) {
-    cta.href = WEMATCH_AGENT_URL;
-    cta.rel = 'noopener';
-    cta.target = '_blank';
-  }
 </script>
 
 </body>

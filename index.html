@@ -286,8 +286,8 @@
           <span class="invitation__rest" data-split>before you find your trip.</span>
         </h2>
         <div class="invitation__actions">
-          <a id="cta" class="invitation__cta" href="#">Meet WeMatch</a>
-          <a class="invitation__cta invitation__cta--secondary" href="https://www.figma.com/deck/S8oGI1d45V8fmbNLtDOfvY/Final-Presentation?node-id=6023-3000&viewport=-101%2C-89%2C0.49&t=XUoHDJ4i41SdXPxO-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" rel="noopener" target="_blank">Finale Presentation</a>
+          <a id="cta" class="invitation__cta" href="https://maind-wematch.vercel.app/" rel="noopener" target="_blank">Meet WeMatch</a>
+          <a class="invitation__cta invitation__cta--secondary" href="https://www.figma.com/deck/S8oGI1d45V8fmbNLtDOfvY/Final-Presentation?node-id=6023-3000&viewport=-101%2C-89%2C0.49&t=XUoHDJ4i41SdXPxO-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" rel="noopener" target="_blank">Project Presentation</a>
         </div>
         <p class="invitation__micro">A live preview. Real agent. No signup.</p>
       </div>
@@ -312,17 +312,6 @@
 
 <!-- Scrollytelling timelines (post-DOM, after CDN scripts loaded) -->
 <script src="design/scenes.js"></script>
-
-<!-- CTA wiring to live agent (preserved from V2) -->
-<script type="module">
-  import { WEMATCH_AGENT_URL } from './config.js';
-  const cta = document.getElementById('cta');
-  if (cta && WEMATCH_AGENT_URL) {
-    cta.href = WEMATCH_AGENT_URL;
-    cta.rel = 'noopener';
-    cta.target = '_blank';
-  }
-</script>
 
 </body>
 </html>
