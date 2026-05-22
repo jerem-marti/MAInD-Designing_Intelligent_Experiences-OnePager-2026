@@ -115,6 +115,13 @@ html { scroll-behavior: auto !important; }
 .invitation__accent {
   color: var(--color-text-inverse);
 }
+.invitation__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-xl);
+}
 .invitation__cta {
   display: inline-block;
   background: var(--color-accent);
@@ -125,11 +132,21 @@ html { scroll-behavior: auto !important; }
   font-weight: var(--font-weight-semibold);
   font-size: var(--text-subhead);
   border-radius: var(--radius-pill);
-  margin-top: var(--space-xl);
-  transition: background var(--duration-fast) var(--ease-standard);
+  border: 1px solid transparent;
+  transition:
+    background var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard);
 }
 .invitation__cta:hover { background: var(--color-accent-strong); }
 .invitation__cta:focus-visible { outline: 2px solid var(--color-focus-ring); outline-offset: 4px; }
+.invitation__cta--secondary {
+  background: transparent;
+  color: var(--color-text-inverse);
+  border: 1px solid rgba(250, 246, 240, 0.44);
+}
+.invitation__cta--secondary:hover {
+  background: rgba(250, 246, 240, 0.12);
+}
 .invitation__micro {
   margin-top: var(--space-md);
   font-size: var(--text-caption);

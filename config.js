@@ -7,4 +7,4 @@
 // No build step. No env var. One line, one change.
 
 export const WEMATCH_AGENT_URL =
-  "https://wematch-agent.placeholder.invalid";
+  "https://maind-wematch.vercel.app/";
